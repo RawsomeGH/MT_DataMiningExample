@@ -46,16 +46,17 @@ namespace MT_DataMiningExample.Patches
                 {
                     var data = ProviderManager.SaveManager?.GetAllGameData().GetAllCollectableRelicData().OrderBy(r => r.GetID());
 
-                    var sb = new StringBuilder();
-                    sb.AppendLine("Id;Name;Description");
+                    var csvStringBuilder = new StringBuilder();
+                    csvStringBuilder.AppendLine("Id;Name;Description");
+
                     foreach (var relicData in data)
                     {
                         var state = new RelicState(relicData);
-                        var desc = ReplaceTokens(state.GetDescription(ProviderManager.SaveManager?.RelicManager));
-                        sb.AppendLine($"{relicData.GetID()};{relicData.GetNameEnglish()};{desc}");
+                        var desc = ReplaceTokens(state.GetDescription(saveManager.RelicManager));
+                        csvStringBuilder.AppendLine($"{relicData.GetID()};{relicData.GetNameEnglish()};{desc}");
                     }
 
-                    File.WriteAllText(Path.Combine(csvPath, csvFilename), sb.ToString());
+                    File.WriteAllText(Path.Combine(csvPath, csvFilename), csvStringBuilder.ToString());
 
                     ran = true;
                 }
